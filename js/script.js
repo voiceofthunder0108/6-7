@@ -32,7 +32,9 @@
     optTitleListSelector = '.titles',
     optArticleTagsSelector = '.post-tags .list',
     optArticleAuthorSelector = '.post .post-author',
-    optTagsListSelector = '.tags.list' ;
+    optTagsListSelector = '.tags.list',
+    optCloudClassCount = '5',
+    optCloudClassPrefix = 'tag-size-';
 
   //Generowanie tytułów w lewej kolumnie:
   const generateTitleLinks = function(customSelector = ''){
@@ -69,6 +71,32 @@
 
   generateTitleLinks();
 
+  const calculateTagsParams = function(tags){
+    let params = {
+      'min': 999999,
+      'max': 0,
+    };
+    for(let tag in tags){
+      if(tags[tag] > params.max){
+        params.max = tags[tag];
+      } else if(tags[tag] < params.min){
+        params.min = tags[tag];
+      }
+    }
+    return params;
+  };
+
+  const calculateTagClass = function(count, params){
+    const normalizedCount = count - params.min;
+
+    const normalizedMax = params.max - params.min;
+
+    const percentage = normalizedCount / normalizedMax;
+
+    const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+
+    return `${optCloudClassPrefix}${classNumber}`;
+  };
   //Generowanie tagów w artykułach:
   const generateTags = function(){
     /* [NEW] create a new variable allTags with an empty object */
@@ -107,13 +135,15 @@
     /* [NEW] find list of tags in right column */
     const tagList = document.querySelector(optTagsListSelector);
 
+    const tagsParams = calculateTagsParams(allTags);
+    console.log('tagsParams:', tagsParams);
     /* [NEW] create variable for all links HTML code */
     let allTagsHTML = '';
 
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
       /* [NEW] generate code of a link and add it to allTagsHTML */
-      allTagsHTML += '<li><a href="#tag-' + tag + '">' + tag + ' </a><span>(' + allTags[tag] + ')</span></li> ';
+      allTagsHTML += `<li class="${calculateTagClass(allTags[tag], tagsParams)}"><a href="#tag-${tag}">${tag}</a></li>`;
     }
     /* [NEW] END LOOP: for each tag in allTags: */
 
