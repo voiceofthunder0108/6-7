@@ -179,19 +179,19 @@
     /* make a new constant "tag" and extract tag from the "href" constant */
     const tag = href.replace('#tag-', '');
     /* find all tag links with class active */
-    const tagLinks = document.querySelectorAll('a.active[href^="#tag-"]');
+    const activeTagLinks = document.querySelectorAll('a.active[href^="#tag-"]');
     /* START LOOP: for each active tag link */
-    for (let link of tagLinks) {
+    for (let activeTagLink of activeTagLinks) {
       /* remove class active */
-      link.classList.remove('active');
+      activeTagLink.classList.remove('active');
     /* END LOOP: for each active tag link */
     }
     /* find all tag links with "href" attribute equal to the "href" constant */
-    const clickedTags = document.querySelectorAll('a[href="' + href + '"]');
+    const tagLinks = document.querySelectorAll('a[href="' + href + '"]');
     /* START LOOP: for each found tag link */
-    for (const clickedTag of clickedTags) {
+    for (const tagLink of tagLinks) {
       /* add class active */
-      clickedTag.classList.add('active');
+      tagLink.classList.add('active');
     /* END LOOP: for each found tag link */
     }
     /* execute function "generateTitleLinks" with article selector as argument */
